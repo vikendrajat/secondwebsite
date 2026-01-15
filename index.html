@@ -1,563 +1,394 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vikendra Jat | Animated Neon Portfolio (Optimized)</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Vikendra Jat | Animated Neon Portfolio</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    /* ====== root vars ====== */
-    :root{
-      --primary:#ff0040; --secondary:#ff6b00; --accent:#ffcc00;
-      --bg-primary:#050510; --bg-secondary:#0d0d18; --bg-card:#151525;
-      --text-primary:#ffffff; --text-secondary:#b0b0c0; --text-muted:#6a6a7a;
-      --radius-card:22px;
-      --transition-fast:0.18s cubic-bezier(.4,0,.2,1);
-      --transition-medium:0.36s cubic-bezier(.4,0,.2,1);
-      --gradient-danger:linear-gradient(135deg,#ff0040 0%,#ff6b00 50%,#ffcc00 100%);
-    }
+<style>
+:root{
+  --primary:#ff0040;
+  --secondary:#ff6b00;
+  --accent:#ffcc00;
+  --bg-primary:#050510;
+  --bg-secondary:#0d0d18;
+  --bg-card:#151525;
+  --text-primary:#fff;
+  --text-secondary:#b0b0c0;
+  --text-muted:#6a6a7a;
+  --radius:22px;
+  --gradient:linear-gradient(135deg,#ff0040,#ff6b00,#ffcc00);
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
 
-    /* ====== global resets ====== */
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%}
-    html{ -webkit-text-size-adjust:100%; }
-    body{
-      font-family:'Rajdhani',sans-serif;
-      color:var(--text-primary);
-      background:radial-gradient(circle at top,#181830 0%,#050510 55%,#02020a 100%);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      -webkit-overflow-scrolling:touch;
-      overscroll-behavior-y:auto;
-      touch-action:pan-y; /* allow smooth vertical panning */
-      overflow-x:hidden;
-      line-height:1.6;
-    }
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:'Rajdhani',sans-serif;
+  background:radial-gradient(circle at top,#181830 0%,#050510 55%,#02020a 100%);
+  color:var(--text-primary);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
 
-    /* prefer reduced motion */
-    @media (prefers-reduced-motion: reduce){
-      *{animation:none !important; transition:none !important}
-    }
+.wallpaper-bg{
+  position:fixed;
+  inset:-15%;
+  z-index:-2;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 10% 20%,rgba(255,0,64,.35),transparent 55%),
+    radial-gradient(circle at 90% 80%,rgba(255,204,0,.25),transparent 55%);
+  transform:translateZ(0);
+}
 
-    /* ====== decorative background - disabled on small screens ====== */
-    .wallpaper-bg{
-      position:fixed; inset:-20%;
-      z-index:-2; pointer-events:none;
-      background:
-        radial-gradient(circle at 8% 20%, rgba(255,0,64,0.45) 0, transparent 55%),
-        radial-gradient(circle at 90% 80%, rgba(255,204,0,0.28) 0, transparent 55%),
-        radial-gradient(circle at 50% 110%, rgba(0,180,255,0.32) 0, transparent 55%);
-      filter:blur(2px);
-      will-change:transform,opacity;
-      animation: bgMove 18s ease-in-out infinite alternate;
-      /* limit GPU cost by keeping transforms (not animating layout) */
-      transform:translateZ(0);
-    }
-    @keyframes bgMove{
-      0%{transform:translate3d(0,0,0) scale(1); opacity:.82}
-      50%{transform:translate3d(-12px,-8px,0) scale(1.03); opacity:1}
-      100%{transform:translate3d(12px,-18px,0) scale(1.05); opacity:.88}
-    }
+@media(max-width:768px){
+  .wallpaper-bg{display:none}
+}
 
-    /* overlay used for subtle darkening - disabled for small screens */
-    .main-overlay{
-      position:fixed; inset:0; z-index:-1; pointer-events:none;
-      background:
-        radial-gradient(circle at top, rgba(0,0,0,0.65), transparent 60%),
-        linear-gradient(to bottom, rgba(0,0,0,0.35), transparent 40%, rgba(0,0,0,0.8));
-    }
+header{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:50;
+  background:rgba(5,5,16,.9);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
 
-    /* ====== header/navbar ====== */
-    header{position:fixed; inset-inline:0; top:0; z-index:60}
-    .navbar{
-      max-width:1200px;margin:0 auto;padding:1rem 1.5rem;
-      display:flex;align-items:center;justify-content:space-between;
-      background:rgba(5,5,16,0.78); border-bottom:1px solid rgba(255,255,255,0.06);
-      backdrop-filter: blur(8px);
-      transition:all var(--transition-medium);
-    }
-    .navbar.scrolled{ padding:.6rem 1.5rem; background:rgba(5,5,16,0.96); box-shadow:0 10px 30px rgba(0,0,0,0.8) }
+.navbar{
+  max-width:1200px;
+  margin:auto;
+  padding:1rem 1.2rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
 
-    .logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
-    .logo-icon{width:34px;height:34px;border-radius:8px;background:rgba(255,0,64,0.12);display:flex;align-items:center;justify-content:center;font-size:1.05rem;color:var(--accent)}
-    .logo-text{font-family:'Orbitron',monospace;font-size:1.05rem;font-weight:900;letter-spacing:2px;background:var(--gradient-danger);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo{
+  display:flex;
+  gap:.6rem;
+  align-items:center;
+  text-decoration:none;
+}
 
-    .nav-links{
-      display:flex;list-style:none;gap:1.2rem;align-items:center;
-    }
-    .nav-links a{ text-decoration:none;color:var(--text-secondary);font-weight:600;font-size:.95rem;text-transform:uppercase;letter-spacing:.12em;position:relative;padding-bottom:.3rem;transition:color var(--transition-fast) }
-    .nav-links a::after{ content:""; position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--gradient-danger);transition:width var(--transition-medium) }
-    .nav-links a:hover{ color:#fff }
-    .nav-links a:hover::after, .nav-links a.active::after{ width:100% }
+.logo-icon{
+  width:34px;height:34px;
+  border-radius:10px;
+  background:rgba(255,0,64,.2);
+  display:grid;place-items:center;
+  font-weight:700;
+}
 
-    .btn-nav{
-      padding:.6rem 1.4rem;border-radius:999px;border:none;font-family:inherit;font-weight:700;font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
-      background:var(--gradient-danger); color:#fff; box-shadow:0 8px 24px rgba(255,0,64,0.6); transition:all var(--transition-medium)
-    }
+.logo-text{
+  font-family:'Orbitron',monospace;
+  font-size:1.05rem;
+  letter-spacing:2px;
+  background:var(--gradient);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
 
-    /* mobile toggle */
-    .mobile-toggle{ display:none;background:none;border:0;color:#fff;font-size:1.6rem;cursor:pointer }
+.nav-links{
+  display:flex;
+  list-style:none;
+  gap:1.4rem;
+}
 
-    /* ====== main layout ====== */
-    main{ max-width:1200px;margin:0 auto;padding:7rem 1.5rem 4rem }
-    section{ padding-block:4.5rem; position:relative }
-    .section-header{text-align:center;margin-bottom:3rem}
-    .section-badge{ display:inline-block;padding:.3rem 1rem;border-radius:999px;border:1px solid rgba(255,0,64,0.5);color:var(--primary);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;background:rgba(255,0,64,0.12);margin-bottom:.7rem }
+.nav-links a{
+  color:var(--text-secondary);
+  text-decoration:none;
+  font-weight:600;
+}
 
-    .section-title{ font-family:'Orbitron',monospace;font-size:clamp(2rem,3vw,2.6rem);margin-bottom:.5rem }
-    .section-description{ max-width:620px;margin:.3rem auto 0;font-size:1rem;color:var(--text-secondary) }
+.mobile-toggle{display:none;background:none;border:none;color:#fff;font-size:1.5rem}
 
-    /* HERO grid */
-    .hero-grid{ display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:3rem; align-items:center }
-    .hero-badge{ display:inline-flex; align-items:center; gap:.6rem; padding:.35rem 1.1rem; border-radius:999px; background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.08); font-size:.8rem; color:var(--text-secondary); margin-bottom:1.2rem }
-    .hero-dot{ width:10px;height:10px;border-radius:999px;background:var(--gradient-danger); box-shadow:0 0 12px rgba(255,0,64,0.9) }
+@media(max-width:992px){
+  .nav-links{
+    position:fixed;
+    top:64px;
+    right:-100%;
+    width:220px;
+    flex-direction:column;
+    background:#070718;
+    padding:1.4rem;
+    transition:right .35s var(--ease);
+  }
+  .nav-links.open{right:0}
+  .mobile-toggle{display:block}
+}
 
-    .hero-title{ font-family:'Orbitron',monospace; font-size:clamp(2.6rem,4vw,3.3rem); line-height:1.1; margin-bottom:1rem }
-    .hero-subtitle{ font-size:1.05rem; color:var(--text-secondary); max-width:580px; margin-bottom:1.2rem }
+main{
+  max-width:1200px;
+  margin:auto;
+  padding:7rem 1.2rem 3rem;
+}
 
-    /* typewriter: keep simple and triggered by intersection observer */
-    .typewriter-line{ font-family:'Orbitron',monospace; font-size:1.05rem;color:var(--accent); white-space:nowrap; overflow:hidden; border-right:2px solid var(--accent); width:0; }
+section{padding:4rem 0}
 
-    /* HERO card */
-    .hero-card{
-      background:radial-gradient(circle at top, rgba(255,0,64,0.15), transparent 55%), #0b0b18;
-      border-radius:24px;padding:1.6rem;border:1px solid rgba(255,255,255,0.08);
-      box-shadow:0 14px 30px rgba(0,0,0,0.85);
-      overflow:hidden;
-      transform:translateZ(0);
-      transition:transform .6s ease, box-shadow .6s ease;
-    }
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:3rem;
+}
 
-    .hero-avatar{ width:86px;height:86px;border-radius:18px;object-fit:cover;border:2px solid rgba(255,255,255,0.18); }
+@media(max-width:992px){
+  .hero-grid{grid-template-columns:1fr}
+}
 
-    /* cards, projects, contact, etc. keep mostly same but with less heavy shadows */
-    .projects-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.8rem }
+.hero-title{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(2.3rem,4vw,3.2rem);
+}
 
-    .project-card{ background:var(--bg-card); border-radius:var(--radius-card); border:1px solid rgba(255,255,255,0.08); overflow:hidden; position:relative; box-shadow:0 10px 28px rgba(0,0,0,0.7); transition:transform .45s ease, box-shadow .45s ease; transform:translateY(12px); opacity:0 }
-    .project-card.revealed{ transform:none; opacity:1 }
-    .project-card:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,0.9) }
+.hero-title span{
+  background:var(--gradient);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
 
-    /* contact */
-    .contact-grid{ display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1.3fr); gap:2.5rem; align-items:flex-start }
-    .contact-card{ background:rgba(4,4,14,0.9); border-radius:var(--radius-card); border:1px solid rgba(255,255,255,0.12); padding:1.8rem; box-shadow:0 14px 36px rgba(0,0,0,0.85); transform:translateX(-10px); opacity:0; transition:all .6s ease }
-    .contact-card.revealed{ transform:none; opacity:1 }
+.hero-subtitle{
+  margin:1rem 0;
+  color:var(--text-secondary);
+}
 
-    /* footer */
-    footer{ border-top:1px solid rgba(255,255,255,0.1); padding:1.7rem 1.5rem 2.3rem; max-width:1200px;margin:0 auto;color:var(--text-muted);font-size:.9rem; display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap }
+.hero-actions{
+  display:flex;
+  gap:1rem;
+  flex-wrap:wrap;
+}
 
-    /* back to top */
-    #backToTop{ position:fixed; bottom:20px; right:20px; width:44px;height:44px;border-radius:999px;border:none;background:var(--gradient-danger);color:#fff;display:none;align-items:center;justify-content:center;z-index:40; cursor:pointer }
+.btn-primary,.btn-outline{
+  padding:.85rem 1.8rem;
+  border-radius:999px;
+  font-weight:700;
+  text-decoration:none;
+  cursor:pointer;
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease);
+}
 
-    /* reveal on scroll */
-    .reveal-on-scroll{ opacity:0; transform:translateY(32px); transition:opacity .7s ease, transform .7s ease }
-    .reveal-on-scroll.revealed{ opacity:1; transform:none }
+.btn-primary{
+  background:var(--gradient);
+  color:#fff;
+  box-shadow:0 10px 30px rgba(255,0,64,.6);
+}
 
-    /* ====== MOBILE / RESPONSIVE OPTIMIZATIONS ====== */
-    @media (max-width:992px){
-      .hero-grid, .about-grid, .skills-grid, .contact-grid{ grid-template-columns:1fr }
-      .hero-card{ max-width:380px; margin-inline:auto }
-      .navbar{ padding-inline:1rem; }
-      .btn-nav{ display:none; }
-      .mobile-toggle{ display:block }
+.btn-outline{
+  border:1px solid rgba(255,255,255,.35);
+  color:#fff;
+}
 
-      /* mobile nav: use transform for smooth GPU animation (no reflow) */
-      .nav-links{
-        position:fixed; top:60px; right:0; width:85vw; max-width:320px; height:calc(100vh - 60px);
-        flex-direction:column; align-items:flex-start; padding:1.25rem; gap:.9rem;
-        background:rgba(5,5,18,0.98); border-left:1px solid rgba(255,255,255,0.06);
-        transform:translateX(110%); transition:transform var(--transition-medium); z-index:70;
-        /* prevent pointer events when hidden */
-        pointer-events:auto;
-      }
-      .nav-links.open{ transform:translateX(0) }
+.hero-card{
+  background:var(--bg-card);
+  border-radius:var(--radius);
+  padding:1.6rem;
+  border:1px solid rgba(255,255,255,.1);
+}
 
-      /* avoid heavy backdrop-filter on mobile */
-      .navbar{ backdrop-filter: none; }
+.hero-avatar{
+  width:82px;height:82px;
+  border-radius:18px;
+  object-fit:cover;
+}
 
-      /* reduce background cost on mobile */
-      .wallpaper-bg, .main-overlay{ display:none }
-    }
+.section-header{text-align:center;margin-bottom:2.5rem}
+.section-title{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(1.9rem,3vw,2.4rem);
+}
+.section-title span{
+  background:var(--gradient);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.section-description{
+  max-width:620px;
+  margin:auto;
+  color:var(--text-secondary);
+}
 
-    @media (max-width:600px){
-      main{ padding-inline:1.1rem }
-      .hero-title{ font-size:2.3rem }
-      .typewriter-line{ font-size:.95rem }
-      footer{ flex-direction:column; text-align:center }
-    }
+.about-grid,
+.skills-grid,
+.contact-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:2.5rem;
+}
 
-    /* reduce animations on very small devices: remove floating glows etc. */
-    @media (max-width:480px){
-      .logo-icon, .hero-avatar, .hero-card{ animation:none !important; box-shadow:none !important }
-    }
-  </style>
+@media(max-width:992px){
+  .about-grid,
+  .skills-grid,
+  .contact-grid{grid-template-columns:1fr}
+}
+
+.about-cards,
+.projects-grid{
+  display:grid;
+  gap:1.2rem;
+}
+
+.stat-card,
+.project-card,
+.contact-card{
+  background:var(--bg-card);
+  border-radius:var(--radius);
+  border:1px solid rgba(255,255,255,.1);
+  padding:1.2rem;
+}
+
+.skills-grid .skill-chip{
+  display:inline-block;
+  padding:.35rem .9rem;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.15);
+  margin:.3rem;
+  color:var(--text-secondary);
+}
+
+footer{
+  border-top:1px solid rgba(255,255,255,.1);
+  padding:2rem 1.2rem;
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  color:var(--text-muted);
+}
+
+#backToTop{
+  position:fixed;
+  bottom:20px;right:20px;
+  width:44px;height:44px;
+  border-radius:50%;
+  background:var(--gradient);
+  color:#fff;
+  border:none;
+  display:none;
+}
+</style>
 </head>
+
 <body>
-  <div class="wallpaper-bg"></div>
-  <div class="main-overlay"></div>
+<div class="wallpaper-bg"></div>
 
-  <header>
-    <nav class="navbar" id="navbar">
-      <a href="#home" class="logo">
-        <div class="logo-icon">VJ</div>
-        <div class="logo-text">VIKENDRA JAT</div>
-      </a>
+<header>
+  <nav class="navbar">
+    <a href="#home" class="logo">
+      <div class="logo-icon">VJ</div>
+      <div class="logo-text">VIKENDRA JAT</div>
+    </a>
+    <button class="mobile-toggle" id="mobileToggle">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
 
-      <button class="mobile-toggle" id="mobileToggle" aria-label="Open menu">☰</button>
-
-      <ul class="nav-links" id="navLinks" aria-hidden="true">
-        <li><a href="#home" class="active">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-
-      <button class="btn-nav" id="downloadCvBtn">Download CV</button>
-    </nav>
-  </header>
-
-  <main>
-    <!-- HERO -->
-    <section id="home">
-      <div class="hero-grid">
-        <div>
-          <div class="hero-badge">
-            <span class="hero-dot" aria-hidden="true"></span>
-            BCA Student · Aspiring Web Developer
-          </div>
-
-          <h1 class="hero-title">
-            I build <span>clean, animated</span><br />
-            web experiences.
-          </h1>
-
-          <div class="typewriter-line" id="typewriterLine">
-            <span id="typewriterText">Front-end focused · Always learning · Ready for real projects</span>
-          </div>
-
-          <p class="hero-subtitle">
-            I am <strong>Vikendra Jat</strong>, a Bachelor of Computer Applications student focused on
-            <strong>front-end development</strong>, modern web technologies, and writing clean,
-            maintainable code. I like turning ideas into functional, user-friendly interfaces that
-            work across devices.
-          </p>
-
-          <div class="hero-actions">
-            <a href="#projects" class="btn-primary">🚀 View Projects</a>
-            <a href="#contact" class="btn-outline">✉️ student</a>
-          </div>
-
-          <div class="hero-tags">
-            <span class="hero-tag">HTML · CSS · JavaScript · Bootstrap</span>
-            <span class="hero-tag">C Programming · Basic SQL</span>
-            <span class="hero-tag">Always Learning & Improving</span>
-          </div>
-        </div>
-
-        <aside class="hero-card">
-          <div class="profile-row">
-            <!-- smaller image and lazy loading -->
-            <img src="https://via.placeholder.com/300x300.png?text=Profile" alt="Profile" class="hero-avatar" loading="lazy" />
-            <div>
-              <div class="hero-name">Vikendra Jat</div>
-              <div class="hero-role">BCA (2nd Year) · Front-End Enthusiast</div>
-              <div class="hero-pill">Projects</div>
-            </div>
-          </div>
-
-          <div class="hero-meta">
-            <span>🌍 India</span>
-            <span>🎓 BCA Student</span>
-          </div>
-
-          <p class="hero-highlights">
-            Currently building projects in <strong>HTML, CSS, JavaScript</strong> and improving my
-            understanding of <strong>databases, C programming, and software fundamentals</strong>.
-          </p>
-        </aside>
+<main>
+<section id="home">
+  <div class="hero-grid">
+    <div>
+      <h1 class="hero-title">I build <span>clean, animated</span><br>web experiences.</h1>
+      <p class="hero-subtitle">
+        I am <strong>Vikendra Jat</strong>, a BCA student focused on front-end development and clean UI.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn-primary">View Projects</a>
+        <a href="#contact" class="btn-outline">Contact</a>
       </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about">
-      <div class="section-header reveal-on-scroll">
-        <div class="section-badge">About</div>
-        <h2 class="section-title">Who <span>I Am</span></h2>
-        <p class="section-description">A BCA student who likes combining logic with visual design and learning by building real projects.</p>
-      </div>
-
-      <div class="about-grid">
-        <div class="reveal-on-scroll">
-          <p class="about-text">I am a <span class="about-highlight">Bachelor of Computer Applications (BCA)</span> student with a genuine interest in how software is designed, built, and delivered.</p>
-          <p class="about-text">My focus is strengthening fundamentals in <strong>web development (HTML, CSS, JS, Bootstrap)</strong> and core programming concepts in <strong>C</strong> and basic database design using <strong>SQL</strong>.</p>
-        </div>
-
-        <div class="about-cards reveal-on-scroll">
-          <div class="stat-card"><div class="stat-value">BCA</div><div class="stat-label">2nd Year Student</div></div>
-          <div class="stat-card"><div class="stat-value">Front-End</div><div class="stat-label">HTML · CSS · JS · Bootstrap</div></div>
-          <div class="stat-card"><div class="stat-value">C &amp; SQL</div><div class="stat-label">Programming & DB Basics</div></div>
-          <div class="stat-card"><div class="stat-value">+Learning</div><div class="stat-label">Open to new tech & tools</div></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section id="skills">
-      <div class="section-header reveal-on-scroll">
-        <div class="section-badge">Skills</div>
-        <h2 class="section-title">What I <span>Work With</span></h2>
-        <p class="section-description">Core skills I am currently using and improving through personal projects and coursework.</p>
-      </div>
-
-      <div class="skills-grid">
-        <div class="reveal-on-scroll">
-          <h3 style="margin-bottom:1rem;">Tech Stack</h3>
-          <div class="skill-chip-group">
-            <span class="skill-chip">HTML5</span>
-            <span class="skill-chip">CSS3</span>
-            <span class="skill-chip">JavaScript (Basics)</span>
-            <span class="skill-chip">Bootstrap 5</span>
-            <span class="skill-chip">C Programming</span>
-            <span class="skill-chip">SQL (Basics)</span>
-            <span class="skill-chip">Responsive Web Design</span>
-            <span class="skill-chip">Git / GitHub (Basics)</span>
-          </div>
-        </div>
-
-        <div class="reveal-on-scroll">
-          <h3 style="margin-bottom:1rem;">Skill Levels (Self-Assessment)</h3>
-          <div class="skill-bars">
-            <div class="skill-row">
-              <div class="skill-top"><span>HTML &amp; Semantic Structure</span><span>85%</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill" style="animation-delay:.1s"></div></div>
-            </div>
-            <div class="skill-row">
-              <div class="skill-top"><span>CSS &amp; Layouts</span><span>75%</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill" style="animation-delay:.25s"></div></div>
-            </div>
-            <div class="skill-row">
-              <div class="skill-top"><span>JavaScript (Basics)</span><span>60%</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill" style="animation-delay:.4s"></div></div>
-            </div>
-            <div class="skill-row">
-              <div class="skill-top"><span>C Programming &amp; Logic</span><span>70%</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill" style="animation-delay:.55s"></div></div>
-            </div>
-            <div class="skill-row">
-              <div class="skill-top"><span>SQL &amp; Data Handling</span><span>55%</span></div>
-              <div class="skill-bar-track"><div class="skill-bar-fill" style="animation-delay:.7s"></div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PROJECTS -->
-    <section id="projects">
-      <div class="section-header reveal-on-scroll">
-        <div class="section-badge">Projects</div>
-        <h2 class="section-title">Things I <span>Built</span></h2>
-        <p class="section-description">Small but real projects that helped me understand structured programming, data, and UI design.</p>
-      </div>
-
-      <div class="projects-grid">
-        <article class="project-card">
-          <div class="project-tag-row">
-            <span class="project-badge">C + File Handling</span><span>Student Management System</span>
-          </div>
-          <div class="project-body">
-            <h3 class="project-title">Console-based Student Management System</h3>
-            <p class="project-desc">A console project using C and basic SQL/file concepts. Supports CRUD operations with menu-driven interface.</p>
-            <div class="project-meta">
-              <span class="project-pill">Structured data handling</span><span class="project-pill">File / DB concepts</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <div class="project-tag-row">
-            <span class="project-badge">HTML · CSS</span><span>Static Portfolio</span>
-          </div>
-          <div class="project-body">
-            <h3 class="project-title">Personal Portfolio Website</h3>
-            <p class="project-desc">A responsive portfolio layout focusing on clean structure and accessibility.</p>
-            <div class="project-meta">
-              <span class="project-pill">Responsive layout</span><span class="project-pill">Navigation links</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <div class="project-tag-row">
-            <span class="project-badge">Practice</span><span>Mini Web Experiments</span>
-          </div>
-          <div class="project-body">
-            <h3 class="project-title">Mini UI &amp; Logic Projects</h3>
-            <p class="project-desc">Small practice projects like forms, landing pages, and basic JS interactions.</p>
-            <div class="project-meta">
-              <span class="project-pill">UI Practice</span><span class="project-pill">JS basics</span>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact">
-      <div class="section-header reveal-on-scroll">
-        <div class="section-badge">Contact</div>
-        <h2 class="section-title">Let’s <span>Connect</span></h2>
-        <p class="section-description">Looking for internships, entry-level roles, or collaboration on projects.</p>
-      </div>
-
-      <div class="contact-grid">
-        <div class="contact-card">
-          <div class="contact-line"><span class="contact-dot"></span><span>Available for remote and on-site opportunities.</span></div>
-          <div class="contact-line"><span class="contact-dot"></span><span>Focused on web development, open to software roles.</span></div>
-          <div class="contact-line"><span class="contact-dot"></span><span>Can work using HTML, CSS, JavaScript, C, and basic SQL.</span></div>
-          <p class="contact-note">Update this section later with email, phone, and social links when ready.</p>
-        </div>
-
-        <form onsubmit="event.preventDefault(); alert('Front-end demo form hai. Backend connect karoge tab ye real ho jayega.');" class="reveal-on-scroll">
-          <div><label for="name">Name</label><input id="name" type="text" placeholder="Enter your name" required /></div>
-          <div><label for="email">Email</label><input id="email" type="email" placeholder="Enter your email" required /></div>
-          <div><label for="message">Message</label><textarea id="message" placeholder="Tell me about the role, project, or idea..." required></textarea></div>
-          <button type="submit" class="btn-primary">Send Message</button>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div>© <span id="year"></span> Vikendra Jat · Built with HTML, CSS &amp; JavaScript.</div>
-    <div class="footer-links">
-      <a href="#home">Top</a><a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#contact">Contact</a>
     </div>
-  </footer>
+    <aside class="hero-card">
+      <img class="hero-avatar" src="https://images.immediate.co.uk/production/volatile/sites/3/2018/05/IRON-2008-d7a2706.jpg">
+      <p style="margin-top:.8rem">BCA · Front-End Enthusiast</p>
+    </aside>
+  </div>
+</section>
 
-  <button id="backToTop" title="Back to top">↑</button>
+<section id="about">
+  <div class="section-header">
+    <h2 class="section-title">Who <span>I Am</span></h2>
+    <p class="section-description">BCA student learning by building real projects.</p>
+  </div>
+  <div class="about-grid">
+    <p>I enjoy front-end work, responsive layouts, and clean code.</p>
+    <div class="about-cards">
+      <div class="stat-card">BCA · 2nd Year</div>
+      <div class="stat-card">HTML · CSS · JS</div>
+      <div class="stat-card">C · SQL</div>
+    </div>
+  </div>
+</section>
 
-  <script>
-    /* ====== small JS improvements to avoid mobile jank ====== */
+<section id="skills">
+  <div class="section-header">
+    <h2 class="section-title">My <span>Skills</span></h2>
+  </div>
+  <div class="skills-grid">
+    <div>
+      <span class="skill-chip">HTML</span>
+      <span class="skill-chip">CSS</span>
+      <span class="skill-chip">JavaScript</span>
+      <span class="skill-chip">Bootstrap</span>
+    </div>
+    <p>Improving fundamentals and real-world usage.</p>
+  </div>
+</section>
 
-    // 1) year
-    document.getElementById('year').textContent = new Date().getFullYear();
+<section id="projects">
+  <div class="section-header">
+    <h2 class="section-title">My <span>Projects</span></h2>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card">Student Management System (C)</div>
+    <div class="project-card">Portfolio Website</div>
+    <div class="project-card">Mini UI Projects</div>
+  </div>
+</section>
 
-    // 2) cache DOM
-    const navbar = document.getElementById('navbar');
-    const backToTop = document.getElementById('backToTop');
-    const mobileToggle = document.getElementById('mobileToggle');
-    const navLinks = document.getElementById('navLinks');
-    const downloadCvBtn = document.getElementById('downloadCvBtn');
-    const typewriterLine = document.getElementById('typewriterLine');
+<section id="contact">
+  <div class="section-header">
+    <h2 class="section-title">Let’s <span>Connect</span></h2>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-card">Available for internships & entry-level roles.</div>
+    <form>
+      <input placeholder="Name" required>
+      <input type="email" placeholder="Email" required>
+      <textarea placeholder="Message"></textarea>
+      <button class="btn-primary">Send</button>
+    </form>
+  </div>
+</section>
+</main>
 
-    // 3) combine scroll logic and make it passive to avoid blocking main thread
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    function handleScroll(){
-      const y = window.scrollY;
-      if (y > 60) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled');
-      backToTop.style.display = (y > 300) ? 'flex' : 'none';
-    }
+<footer>
+  <div>© <span id="year"></span> Vikendra Jat</div>
+  <div>
+    <a href="#home">Top</a>
+  </div>
+</footer>
 
-    // 4) back to top
-    backToTop.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+<button id="backToTop">↑</button>
 
-    // 5) mobile nav toggle: use transform (CSS) to avoid layout reflow.
-    mobileToggle.addEventListener('click', () => {
-      const isOpen = navLinks.classList.toggle('open');
-      // prevent background scroll when mobile nav is open (only on small screens)
-      if (isOpen) {
-        document.body.classList.add('nav-open');
-        document.body.style.height = '100vh';
-        document.body.style.overflow = 'hidden';
-        navLinks.setAttribute('aria-hidden','false');
-        mobileToggle.setAttribute('aria-expanded','true');
-      } else {
-        document.body.classList.remove('nav-open');
-        document.body.style.height = '';
-        document.body.style.overflow = '';
-        navLinks.setAttribute('aria-hidden','true');
-        mobileToggle.setAttribute('aria-expanded','false');
-      }
-    });
+<script>
+document.getElementById("year").textContent=new Date().getFullYear();
 
-    // close nav on link click
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('open');
-        document.body.style.height = '';
-        document.body.style.overflow = '';
-        navLinks.setAttribute('aria-hidden','true');
-      });
-    });
+const toggle=document.getElementById("mobileToggle");
+const nav=document.getElementById("navLinks");
+toggle.onclick=()=>nav.classList.toggle("open");
 
-    // 6) download CV demo
-    downloadCvBtn.addEventListener('click', () => {
-      alert('Abhi yeh demo button hai. CV file bana kar is button se link karna padega.');
-    });
+const topBtn=document.getElementById("backToTop");
+window.addEventListener("scroll",()=>{
+  topBtn.style.display=window.scrollY>400?"block":"none";
+},{passive:true});
 
-    // 7) scroll reveal using IntersectionObserver (efficient)
-    const revealObserver = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-          // for general reveal-on-scroll elements, add revealed and unobserve
-          entry.target.classList.add('revealed');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.18 });
-
-    document.querySelectorAll('.reveal-on-scroll, .project-card, .contact-card, form').forEach(el => {
-      revealObserver.observe(el);
-    });
-
-    // 8) Typewriter: use IntersectionObserver to trigger typing once (avoid expensive repeated getBoundingClientRect on scroll)
-    const typeObserver = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // run a CSS typing animation by toggling a class (we will set the animation here directly)
-          const textSpan = document.getElementById('typewriterText');
-          // simple JS typing fallback: animate width via CSS steps
-          typewriterLine.style.width = '100%';
-          typewriterLine.style.animation = 'typing 3.5s steps(30,end) forwards';
-          // add caret animation via inline style
-          typewriterLine.style.borderRight = '2px solid var(--accent)';
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.6 });
-
-    if (typewriterLine) typeObserver.observe(typewriterLine);
-
-    // 9) ensure project cards get the 'revealed' class added (observer already does it) but we also add a small stagger for nicer effect:
-    const projectCards = document.querySelectorAll('.project-card');
-    projectCards.forEach((card,i) => {
-      // small stagger reveal if already visible after load
-      setTimeout(()=> {
-        if (card.getBoundingClientRect().top < window.innerHeight) card.classList.add('revealed');
-      }, 250 + i * 120);
-    });
-
-    // 10) accessibility: close mobile nav on escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && navLinks.classList.contains('open')) {
-        navLinks.classList.remove('open');
-        document.body.style.overflow = '';
-      }
-    });
-
-    /* ====== CSS typing keyframe (insert via JS-safe method) ====== */
-    (function addKeyframes(){
-      const style = document.createElement('style');
-      style.textContent = `
-        @keyframes typing { from { width: 0 } to { width: 100% } }
-        @keyframes caret { 0%,100%{ border-color: transparent } 50%{ border-color: var(--accent) } }
-      `;
-      document.head.appendChild(style);
-    })();
-  </script>
+topBtn.onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
+</script>
 </body>
 </html>
